@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="org.zerock.mapper.LeaseMapper">
+ 	<insert id = "create">
+ 	insert into room_info(addr1,addr2,room_type,floor1,floor2,roomsize,lease_type,cost1,cost2,title,img)
+ 	values(#{addr1}, #{addr2}, #{room_type}, #{floor1}, #{floor2}, #{roomsize}, #{lease_type}, #{cost1}, #{cost2}, #{title}, #{img})
+ 	</insert>
+ 	<select id="getAllLease_type" resultType="RoomVO">
+ 		select * from room_info
+ 	</select>
+ 	
+ 	<select id="getLease_type" resultType="RoomVO">
+ 		select * from room_info where lease_type=#{lease_type}
+ 	</select>
+ 	
+ 	<select id="getRoom_type" resultType="RoomVO">
+ 		select * from room_info where room_type=#{room_type}
+ 	</select>
+ 	
+ 	<select id="getDeposit" resultType="RoomVO">
+ 		select * from room_info where cost1 between #{num1} and #{num2}
+ 	</select>
+ 	
+ 	<select id="getMonthly" resultType="RoomVO">
+ 		select * from room_info where cost2 between #{num1} and #{num2}
+ 	</select>
+ 	
+ 	<select id="getSqm" resultType="RoomVO">
+ 		select * from room_info where roomsize between #{num1} and #{num2}
+ 	</select>
+ 	
+ 	<!-- 페이징처리 -->
+ 	<select id="listAll" resultType="RoomVO">
+ 	<![CDATA[
+ 	select * from room_info where rno>0
+ 		order by rno desc
+ 		]]>
+ 	</select>
+ 	
+ 	<select id="listPage" resultType="RoomVO">
+ 		<![CDATA[
+ 		select * from room_info where rno>0
+ 		order by rno desc
+ 		limit #{page},10
+ 		]]>
+ 	</select>
+ 	
+ 	<select id="listCriteria" resultType="RoomVO">
+ 		<![CDATA[
+ 		select * from room_info where rno>0
+ 		order by rno desc limit #{pageStart}, #{perPageNum}
+ 		]]>
+ 	</select>
+ 	
+ 	<select id="countPaging" resultType="int">
+ 	<![CDATA[
+ 	select count(rno) from room_info
+ 	where rno>0
+ 	]]>
+ 	</select>
+ 	
+ 	<!-- showDetail.jsp db가져오기 -->
+ 	<select id="getInfo" resultType="RoomVO">
+ 		select * from room_info where rno=#{rno}
+ 	</select>
+ 	
+ 	<!-- like 추가 -->
+  	<select id="setLike" resultType="LikeVO">
+ 		insert into likeit2 (rno2, favorite)
+ 		values(#{rno2},#{favorite})
+ 	</select>
+ 	
+ 	<!-- like 했던 것 db 가져오기 -->
+	<select id="getLikeData" resultType="int">
+		select favorite from likeit2 where rno2=${rno2}
+	</select>
+	
+	
+ 	
+ </mapper>
